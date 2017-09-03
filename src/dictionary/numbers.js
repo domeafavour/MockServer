@@ -10,6 +10,15 @@ function random(start, end) {
   return Math.round(Math.random() * (end - start) + start )
 }
 
+/**
+ * get one random value of an array
+ * @param  {Array} array the array
+ * @return {any}       random value of array
+ */
+function randomValueOfArray (array) {
+  return array[random(0, array.length - 1)]
+}
+
 function age (start, end) {
   return random(start || 18, end || 99)
 }
