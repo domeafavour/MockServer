@@ -6,13 +6,9 @@ var emails = require('./string/emails')
 
 var numbers = require('./numbers')
 
-var ran = numbers.random
-
 function name () {
-	var lastNames = names.lastNames
-	var firstNames = names.firstNames
-	return lastNames[ran(0, lastNames.length - 1)].def
-		+ firstNames[ran(0, firstNames.length - 1)].def
+	return numbers.randomValueOfArray(names.lastNames).def
+		+ numbers.randomValueOfArray(names.firstNames).def
 }
 
 function nick () {
@@ -34,7 +30,7 @@ function mobile () {
 function email () {
 	var hosts = emails.hosts
 	var name = random().substr(0, 8)
-	return name + '@' + hosts[ran(0, hosts.length - 1)] + '.com'
+	return name + '@' + numbers.randomValueOfArray(hosts) + '.com'
 }
 
 function random () {
