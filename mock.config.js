@@ -1,6 +1,17 @@
 var numbers = require('./src/dictionary/numbers')
 module.exports = {
-  data: {
+  api: {
+    '/': {
+      type: Object,
+      construct: {
+        version: {
+          type: String,
+          formatter: function () {
+            return '1.1.0'
+          }
+        }
+      }
+    },
     users: {
       type: Array,
       size: 10, // default: 10
@@ -8,6 +19,10 @@ module.exports = {
         name: {
           type: String,
           field: 'name'
+        },
+        homePage: {
+          type: String,
+          field: 'url'
         },
         age: {
           type: Number,
