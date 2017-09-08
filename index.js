@@ -14,4 +14,5 @@ console.log('server started...')
 // 	}
 // }
 
+// wonderful reg
 var moneyReg = /^([1-9]\d{0,}|0)([.]?|(\.\d{1,2})?)$/
