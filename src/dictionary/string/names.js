@@ -13,7 +13,9 @@ var lastNames = [
 
 var firstNames = [
 	{ def: '睿' }, { def: '浩' }, { def: '博' }, { def: '瑞'},
-	{ def: '昊' }, { def: '静' }, { def: '玉' }, { def: '春'}
+	{ def: '昊' }, { def: '静' }, { def: '玉' }, { def: '春'},
+	{ def: '逸飞' }, { def: '云逸' }, { def: '汝逸' }, { def: '本初'},
+	{ def: '子涵' }, { def: '梓涵' }, { def: '子轩' }, { def: '浩然'},
 ]
 
 module.exports = {

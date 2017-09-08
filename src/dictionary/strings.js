@@ -4,11 +4,11 @@ var urls = require('./string/urls')
 var mobiles = require('./string/mobiles')
 var emails = require('./string/emails')
 
-var numbers = require('./numbers')
+var $random = require('./random')
 
 function name () {
-	return numbers.randomValueOfArray(names.lastNames).def
-		+ numbers.randomValueOfArray(names.firstNames).def
+	return $random.randomValueOfArray(names.lastNames).def
+		+ $random.randomValueOfArray(names.firstNames).def
 }
 
 function nick () {
@@ -16,25 +16,33 @@ function nick () {
 }
 
 function address () {
-	return 'shanghai'
+	return $random.randomValueOfArray(addresses.addresses)
 }
 
 function url () {
-	return 'https://www.google.com'
+	return $random.randomValueOfArray(urls.security) +'://' 
+				+ $random.randomString(8, 'lowercase') +'.'
+				+ $random.randomValueOfArray(urls._)
 }
 
 function mobile () {
-	return '18226745637'
+	var nums = [1]
+	var secondNums = [3, 4, 5, 7, 8]
+	nums.push($random.randomValueOfArray(secondNums))
+	for (var i = 0; i < 9; i ++) {
+		nums.push($random.random(0, 9))
+	}
+	return nums.join('')
 }
 
 function email () {
 	var hosts = emails.hosts
-	var name = random().substr(0, 8)
-	return name + '@' + numbers.randomValueOfArray(hosts) + '.com'
+	var name = $random.randomString(8, 'lowercase')
+	return name + '@' + $random.randomValueOfArray(hosts) + '.com'
 }
 
 function random () {
-	return Math.random().toString(36).substr(2)
+	return $random.randomString()
 }
 
 module.exports = {

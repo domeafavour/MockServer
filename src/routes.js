@@ -1,10 +1,29 @@
 var mockConfig = require('./../mock.config')
 var injector = require('./injector')
+
 var numbers = require('./dictionary/numbers')
 var strings = require('./dictionary/strings')
 
+var random = require('./dictionary/random')
+
 // var pathNameRegx = /^\/?([\w+|\W+]\/?)+$/
 var replaceRegx = /^\/|\/$/g
+var isHtmlRegx = /.(html|htm)$/
+var htmlFileRegx = /\/((\w+|\W+).(html|htm))$/
+
+var htmlTagRegx = /<(S*?)[^>]*>.*?|<.*?\/>/g
+
+function getHtmlFileName (pathName) {
+  if (isHtmlRegx.test(pathname)) {
+    var temp = pathname.match(htmlFileRegx)
+    if (temp) {
+      return temp[1]
+    } else {
+      return pathname
+    }
+  }
+  return pathname
+}
 
 // var funcRegx = /^(Number|Boolean|String|Array|Object)$/
 // var funcToStringRegx = /^\[object\s(Number|String|Boolean|Array|Object)\]$/
@@ -22,14 +41,18 @@ function isBoolean (constructor) {
 }
 
 function mockRoute (pathname) {
-  var realPathName = pathname.replace(replaceRegx, '')
+  // console.log('pathname: ' + pathname)
+  var realPathName = '/'
+  if (pathname !== '/') {
+    realPathName = pathname.replace(replaceRegx, '')
+  }
   if (realPathName === 'favicon.ico') {
     return null
   }
   if (mockConfig.inject) {
     injector.inject(mockConfig.inject)
   }
-  var config = mockConfig.data[realPathName]
+  var config = mockConfig.api[realPathName]
   var json = handleConfig(config)
   return JSON.stringify(json)
 }
@@ -56,11 +79,10 @@ function handleConfig (config) {
     for (var i in config) {
       var info = config[i]
       var infoType = info.type
-      if (isArray(infoType) || isObject(infoType)) {
-        json[i] = formatVal(info, handleConfig(info))
-      } else {
-        json[i] = getValue(infoType, info)
-      }
+      json[i] = 
+        (isArray(infoType) || isObject(infoType)) 
+            ? formatVal(info, handleConfig(info))
+                : getValue(infoType, info)
     }
   } 
   return json
@@ -74,24 +96,16 @@ function handleConfig (config) {
  */
 function getValue (type, info) {
   if (isBoolean(type)) {
-    return Boolean(numbers.random(0, 1))
+    return Boolean(random.random(0, 1))
   } else {
     var field = info.field || 'random', 
         args = [], 
         val, 
         target = strings
-    switch (type) {
-      case String: {
-        // field = info.field || 'name'
-        break
-      }
-      case Number: {
-        target = numbers
-        // field = info.field || 'age'
-        if (info.range) {
-          args = getRange(info.range)
-        }
-        break
+    if (type === Number) {
+      target = numbers
+      if (info.range) {
+        args = getRange(info.range)
       }
     }
     val = target[field].apply(null, args)
@@ -99,6 +113,12 @@ function getValue (type, info) {
   }
 }
 
+/**
+ * format value when formatter is overwrited is config
+ * @param  {[type]} info [description]
+ * @param  {[type]} val  [description]
+ * @return {[type]}      [description]
+ */
 function formatVal (info, val) {
   return info.formatter ? info.formatter(val) : val
 }

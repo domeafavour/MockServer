@@ -1,5 +1,6 @@
 var numbers = require('./dictionary/numbers')
 var strings = require('./dictionary/strings')
+var random = require('./dictionary/random')
 
 var types = {
   'numbers': numbers,
@@ -19,7 +20,7 @@ function injectFields (fields) {
   for (var f in fields) {
     var field = fields[f]
     for (var m in field) {
-      types[f] = field[m]
+      types[f][m] = field[m]
     }
   }
 }

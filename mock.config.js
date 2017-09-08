@@ -1,4 +1,4 @@
-var numbers = require('./src/dictionary/numbers')
+var $random = require('./src/dictionary/random')
 module.exports = {
   api: {
     '/': {
@@ -8,6 +8,12 @@ module.exports = {
           type: String,
           formatter: function () {
             return '1.1.0'
+          }
+        },
+        timestap: {
+          type: String,
+          formatter: function () {
+            return Date.now()
           }
         }
       }
@@ -31,6 +37,10 @@ module.exports = {
           formatter: function (age) {
             return age + '岁'
           }
+        },
+        address: {
+          type: String,
+          field: 'address'
         },
         girlFriend: {
           type: Object,
@@ -114,7 +124,7 @@ module.exports = {
     fields: {
       strings: {
         brand: function() {
-          return ['google', 'apple'][numbers.random(0, 1)]
+          return ['google', 'apple'][$random.random(0, 1)]
         }
       },
       numbers: {}

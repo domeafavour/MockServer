@@ -1,6 +1,7 @@
+var random = require('./random')
 
 function age (start, end) {
-  return random(start || 18, end || 99)
+  return random.random(start || 18, end || 99)
 }
 
 function price () {
@@ -12,9 +13,7 @@ function id () {
 }
 
 module.exports = {
-  random,
   age,
   price,
-  id,
-  randomValueOfArray
+  id
 }
