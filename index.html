@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Index</title>
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<h1>Mock Server</h1>
+		<div class="form-group">
+			<label for="url">URL:</label><input id="url" type="text" class="form-control">
+		</div>
+		<button class="btn btn-primary request-btn">Request</button>
+
+		<button class="btn btn-primary fetch-users-btn hide">Fetch Users</button>
+		<ul class="list-group users-list hide"></ul>
+	</div>
+
+	<script>
+		var urlInput = document.querySelector('#url')
+		var requestBtn = document.querySelector('.request-btn')
+		requestBtn.addEventListener('click', function () {
+			fetch(urlInput.value)
+			.then(res => res.json())
+			.then(json => console.log(json))
+			.catch(e => console.log(e))
+		})
+
+	</script>
+	
+	<script>
+		var MUSTACHE_REG = /{{\s{0,}(\w+.\w+)\s{0,}}}/g
+		var toString = Object.prototype.toString
+		var arrayString = toString.call([])
+
+		function isArray(object) {
+			return Array.isArray ? Array.isArray(object) : toString.call(object) === arrayString
+		}
+
+		function mustache(string, data, by) {
+			var result = ''
+			if (isArray(data)) {
+				for (var i in data) {
+					result += mustache(string, data[i])
+					if (by) {
+						result += by
+					}
+				}
+			} else {
+				result = string.replace(MUSTACHE_REG, function (match, prop) {
+					return prop in data ? data[prop] : ''
+				})
+			}
+			return result
+		}
+	</script>
+	<script id="user-tmpl" type="text/template">
+		<li class="list-group-item">
+			<h5 class="user-name">{{name}}</h5>
+			<a href="{{homePage}}" class="">{{homePage}}</a>
+		</li>
+	</script>
+	<script>
+		var api = '/users'
+		var usersList = document.querySelector('.users-list')
+		var fetchUsersBtn = document.querySelector('.fetch-users-btn')
+		fetchUsersBtn.addEventListener('click', fetchUsersList)
+
+		function fetchUsersList () {
+			fetch(api)
+			.then(res => res.json())
+			.then(renderList)
+			.catch(errHandler)
+		}
+
+		var userTmpl = document.querySelector('#user-tmpl').innerHTML.trim()
+		function renderList (json) {
+			var html = ''
+			for (var user of json) {
+				html += mustache(userTmpl, user)
+			}
+			usersList.innerHTML += html
+		}
+
+		function errHandler (e) {
+			console.log(e)
+		}
+
+	</script>
+</body>
+</html>
